@@ -16,6 +16,7 @@ class DefaultViewManager {
 		this.request = options.request;
 		this.renditionQueue = options.queue;
 		this.q = new Queue(this);
+		this.rendition = options.rendition;
 
 		this.settings = extend(this.settings || {}, {
 			infinite: true,
@@ -299,14 +300,18 @@ class DefaultViewManager {
 
 		this.add(section, forceRight)
 			.then(function(view){
-
-				// Move to correct place within the section, if needed
-				if(target) {
-					let offset = view.locationOf(target);
-					let width = view.width();
-					this.moveTo(offset, width);
-				}
-
+				// Move to correct place within the section after all the fonts are ready, if needed
+				view.document.fonts.ready.then(() => {
+					if (target) {
+						let offset = view.locationOf(target);
+						let width = view.width();
+						this.scrollTo(offset.left, offset.top, true);
+						this.moveTo(offset, width);
+						
+						//TODO: create a proper event for this
+						this.rendition.emit(EVENTS.RENDITION.DISPLAYED, this.section);
+					}
+				});
 			}.bind(this), (err) => {
 				displaying.reject(err);
 			})

@@ -230,7 +230,8 @@ class Rendition {
 				view: this.View,
 				queue: this.q,
 				request: this.book.load.bind(this.book),
-				settings: this.settings
+				settings: this.settings,
+				rendition: this
 			});
 		}
 
