@@ -307,10 +307,10 @@ class DefaultViewManager {
 						let width = view.width();
 						this.scrollTo(offset.left, offset.top, true);
 						this.moveTo(offset, width);
-						
 						//TODO: create a proper event for this
 						this.rendition.emit(EVENTS.RENDITION.DISPLAYED, this.section);
 					}
+					this.views.show();
 				});
 			}.bind(this), (err) => {
 				displaying.reject(err);
@@ -320,7 +320,6 @@ class DefaultViewManager {
 			}.bind(this))
 			.then(function(){
 
-				this.views.show();
 
 				displaying.resolve();
 
